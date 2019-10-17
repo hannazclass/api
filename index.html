@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+  <script type="text/javascript" src="jquery.ajax-cross-origin.min.js"></script><!-- 크로스도메인 해결 플러그인 -->
+  <!-- <script type="text/javascript">
+  $(document).ready(function(){    
+      $.ajax({
+          crossOrigin: true,    // 크로스도메인 해결 플러그인
+          url: 'http://www.kma.go.kr/weather/forecast/mid-term-rss3.jsp?stnId=108',
+          dataType: 'xml',
+          success: function(response){
+              console.log('성공',response);
+              $(response).find('location').each(function(){
+                  var city = $(this).find('city').text();
+                  if(city == '대전'){
+                      $('body').append(city + '<br>');
+                      $(this).find('data').each(function(){
+                          var output = $(this).find('tmEf').text() + " " + $(this).find('wf').text();
+                          $('body').append(output + '<br>');
+                      })
+                  }
+              })
+          }
+      })
+  })
+  </script> -->
+  <script type="text/javascript">
+    $(document).ready(function(){    
+        $.ajax({
+            crossOrigin: true,    // 크로스도메인 해결 플러그인
+            url: 'http://www.kma.go.kr/wid/queryDFSRSS.jsp?zone=3017055500',
+            dataType: 'xml',
+            success: function(response){
+                console.log(response);
+                
+                var city = $(response).find('category').text();
+                $('body').append(city + '<br>');
+                
+                $(response).find('data').each(function(){
+                    var day = $(this).find('day').text();
+                    var dayTxt = "오늘";
+                    var hour = $(this).find('hour').text();
+                    var wfKor = $(this).find('wfKor').text();
+                    var temp = $(this).find('temp').text();
+                    if(day == 1) { var dayTxt = "내일"; }
+                    if(day == 2) { var dayTxt = "모레"; }
+                    var output = dayTxt + " " + hour + "시" + wfKor + " " + temp;
+                    $('body').append(output + '<br>');
+                })
+            }
+        })
+    })
+    </script>
+</head>
+<body>
+  
+</body>
+</html>
